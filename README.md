@@ -51,7 +51,7 @@ Projekt został zrealizowany w języku **Java** i wykorzystuje:
 ## 📌 Instalacja i uruchomienie
 1. **Klonowanie repozytorium**:
    ```bash
-   git clone https://github.com/TwojeRepozytorium/ecommerce-backend.git
+   git clone https://github.com/poprostuadam/E-commerce_backend.git
    cd ecommerce-backend
    ```
 2. **Uruchomienie aplikacji**:
