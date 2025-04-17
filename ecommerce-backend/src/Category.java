@@ -1,0 +1,20 @@
+public enum Category {
+    BAKERY,
+    DAIRY,
+    MEAT,
+    SEAFOOD,
+    FRUITS,
+    VEGETABLES,
+    SNACKS,
+    DRINKS,
+    ALCOHOL,
+    FROZEN_FOOD,
+    CANNED_FOOD,
+    HOUSEHOLD_SUPPLIES,
+    PET_SUPPLIES,
+    PERSONAL_CARE,
+    BABY_PRODUCTS,
+    HEALTH_AND_WELLNESS,
+    SPICES,
+
+}
