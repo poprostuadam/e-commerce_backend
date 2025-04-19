@@ -16,5 +16,4 @@ public enum Category {
     BABY_PRODUCTS,
     HEALTH_AND_WELLNESS,
     SPICES,
-
 }

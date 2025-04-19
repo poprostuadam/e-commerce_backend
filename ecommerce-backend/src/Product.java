@@ -30,7 +30,6 @@ public class Product {
     }
 
     // Settery
-
     public void setName(String name) {
         this.name = name;
     }
@@ -49,6 +48,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return name + " [" + category + "] " + price + " zl" + (isAvailable ? "" : "[Niedostepny]");
+        return name + " [" + category + "] " + price + " zl" + (isAvailable ? "" : "[Unavailable]");
     }
 }
