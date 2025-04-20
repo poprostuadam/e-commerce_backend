@@ -2,7 +2,6 @@ public enum Category {
     BAKERY,
     DAIRY,
     MEAT,
-    SEAFOOD,
     FRUITS,
     VEGETABLES,
     SNACKS,

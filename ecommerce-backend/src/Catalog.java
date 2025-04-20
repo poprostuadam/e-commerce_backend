@@ -2,13 +2,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Catalog {
-    private final List<CatalogEntry> entries = new ArrayList<>();
+
+    private final List<CatalogItem> entries = new ArrayList<>();
 
     public Catalog() {
-//        this.entries = new ArrayList<>();
         initializeCatalog();
     }
 
+    // Catalog initialization
     private void initializeCatalog() {
         addProduct(new Product("Banana", 2.40, Category.FRUITS, true), 5);
         addProduct(new Product("Lemon", 1.50, Category.FRUITS, true), 2);
@@ -22,32 +23,39 @@ public class Catalog {
     }
 
     public void addProduct(Product product, int quantity) {
-        entries.add(new CatalogEntry(product, quantity));
+        entries.add(new CatalogItem(product, quantity));
     }
 
-    public List<CatalogEntry> getEntries() {
+    public List<CatalogItem> getAllEntries() {
         return entries;
     }
 
     public List<Product> getProductsSortedByName() {
         return entries.stream()
-                .map(CatalogEntry::getProduct)
+                .map(CatalogItem::getProduct)
                 .sorted(Comparator.comparing(Product::getName))
                 .collect(Collectors.toList());
     }
 
-    // do implementacji
-    public List<Product> getProductsByCategorySortedByPrice(Category category) {
-        return null;
+    public List<Product> getProductsByCategorySortedByPrice(Category category, boolean ascending, boolean showUnavailable) {
+        return entries.stream()
+                .map(CatalogItem::getProduct)
+                .filter((Product p) -> p.getCategory() == category)
+                .filter((Product p) -> showUnavailable || p.isAvailable())
+                .sorted((Product p1, Product p2) -> {
+                    /*
+                    * p1.getPrice() < p2.getPrice() -> -1
+                    * p1.getPrice() > p2.getPrice() -> 1
+                    * p1.getPrice() = p2.getPrice() -> 0
+                    * */
+                    int compare = Double.compare(p1.getPrice(), p2.getPrice());
+                    return ascending ? compare : -compare;
+                })
+                .collect(Collectors.toList());
     }
 
     public void clearCatalog() {
         entries.clear();
     }
 
-    public void printCatalog() {
-        for (CatalogEntry entry : entries) {
-            System.out.println(entry);
-        }
-    }
 }

@@ -1,8 +1,12 @@
-public class CatalogEntry {
-    private Product product;
+public class CatalogItem   {
+    /**
+    * Adapter class for adding products to the catalog with quantity
+    */
+
+    private final Product product;
     private int quantity;
 
-    public CatalogEntry(Product product, int quantity) {
+    public CatalogItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }

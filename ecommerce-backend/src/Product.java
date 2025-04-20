@@ -1,4 +1,5 @@
 public class Product {
+
     private String name;
     private double price;
     private Category category;
@@ -8,6 +9,11 @@ public class Product {
         this.name = name;
         this.price = price;
         this.category = category;
+
+        /*
+        * 0 - unavailable
+        * 1 - available
+        */
         this.isAvailable = isAvailable;
     }
 
@@ -48,6 +54,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return name + " [" + category + "] " + price + " zl" + (isAvailable ? "" : "[Unavailable]");
+        return name + " [" + category + "] " + price + " zl " + (isAvailable ? "[Available]" : "[Unavailable]");
     }
 }
