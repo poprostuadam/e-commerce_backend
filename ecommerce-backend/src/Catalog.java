@@ -1,63 +1,101 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
+/***
+ * Represents catalog.
+ */
 public class Catalog {
+    private final  Map<Product, Integer> catalog;
 
-    private final List<CatalogItem> entries = new ArrayList<>();
-
+    /**
+     * Constructs a new Catalog.
+     */
     public Catalog() {
-        initializeCatalog();
+        catalog = new HashMap<>();
     }
 
-    // Catalog initialization
-    private void initializeCatalog() {
-        addProduct(new Product("Banana", 2.40, Category.FRUITS, true), 5);
-        addProduct(new Product("Lemon", 1.50, Category.FRUITS, true), 2);
-        addProduct(new Product("Apple", 1.09, Category.FRUITS, true), 10);
-        addProduct(new Product("Bread", 0.89, Category.BAKERY, true), 4);
-        addProduct(new Product("Salt", 0.29, Category.SPICES, true), 0);
-        addProduct(new Product("Cola", 0.99, Category.DRINKS, true), 15);
-        addProduct(new Product("Water", 0.49, Category.DRINKS, true), 1);
-        addProduct(new Product("Milk", 0.79, Category.DAIRY, true), 5);
-        addProduct(new Product("Beer", 1.15, Category.ALCOHOL, false), 10);
-    }
-
-
+    /**
+     * Adds a specific quantity of a product to the catalog.
+     *
+     * @param product The product to be added.
+     * @param quantity The quantity of the product to be added.
+     */
     public void addProduct(Product product, int quantity) {
-        entries.add(new CatalogItem(product, quantity));
-
+        if (catalog.containsKey(product)) {
+            catalog.put(product, catalog.get(product) + quantity);
+        } else {
+            catalog.put(product, quantity);
+        }
     }
 
-    public List<CatalogItem> getAllEntries() {
-        return entries;
+    public void removeProduct(Product product) {
+        catalog.remove(product);
     }
 
+    /**
+     * Decreases the quantity of a product in the catalog.
+     *
+     * @param product The product whose quantity will be decreased.
+     */
+    public void decreaseProductQuantity(Product product) {
+        if (catalog.containsKey(product)) {
+            int quantity = catalog.get(product);
+            if (quantity > 0) {
+                catalog.put(product, quantity - 1);
+                System.out.println("Product " + product.getName() + " has been decreased from " + quantity + " to: " + (quantity - 1));
+            } else {
+                System.out.println("Product quantity is already 0.");
+            }
+        } else {
+            System.out.println("Product " + product.getName() + " does not exist in catalog.");
+        }
+    }
+
+    /**
+     * Get the product quantity.
+     *
+     * @param product The product whose quantity will be returned
+     */
+    public int getProductQuantity(Product product) {
+        if (catalog.containsKey(product)) {
+            return catalog.get(product);
+        } else {
+            System.out.println("Product " + product.getName() + " does not exist in catalog.");
+            return 0;
+        }
+    }
+
+    /**
+     * Returns a list of all products sorted by their name in ascending order.
+     *
+     * @return a list of products sorted by name
+     */
     public List<Product> getProductsSortedByName() {
-        return entries.stream()
-                .map(CatalogItem::getProduct)
+        return catalog.keySet().stream()
                 .sorted(Comparator.comparing(Product::getName))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns a list of products filtered by the specified category and availability,
+     * sorted by price in either ascending or descending order.
+     *
+     * @param category the category to filter products by
+     * @param ascending whether to sort the products in ascending (true) or descending (false) order of price
+     * @param showUnavailable whether to include unavailable products in the result (true to include, false to exclude)
+     * @return a list of products filtered by category and sorted by price
+     */
     public List<Product> getProductsByCategorySortedByPrice(Category category, boolean ascending, boolean showUnavailable) {
-        return entries.stream()
-                .map(CatalogItem::getProduct)
-                .filter((Product p) -> p.getCategory() == category)
-                .filter((Product p) -> showUnavailable || p.isAvailable())
-                .sorted((Product p1, Product p2) -> {
-                    /*
-                    * p1.getPrice() < p2.getPrice() -> -1
-                    * p1.getPrice() > p2.getPrice() -> 1
-                    * p1.getPrice() = p2.getPrice() -> 0
-                    * */
-                    int compare = Double.compare(p1.getPrice(), p2.getPrice());
+        // Filter products by category, availability, and sort by price
+        return catalog.entrySet().stream()
+                .filter(entry -> entry.getKey().getCategory() == category)  // Filter by category
+                .filter(entry -> showUnavailable || entry.getKey().isAvailable())  // Filter by availability
+                .sorted((entry1, entry2) -> {
+                    // Compare product prices
+                    int compare = Double.compare(entry1.getKey().getPrice(), entry2.getKey().getPrice());
                     return ascending ? compare : -compare;
                 })
+                .map(Map.Entry::getKey)  // Return only the products (keys)
                 .collect(Collectors.toList());
     }
-
-    public void clearCatalog() {
-        entries.clear();
-    }
-
 }
