@@ -1,7 +1,8 @@
+/**
+ * Adapter class for adding products to the catalog with quantity
+ */
+
 public class CatalogItem   {
-    /**
-    * Adapter class for adding products to the catalog with quantity
-    */
 
     private final Product product;
     private int quantity;
@@ -25,13 +26,6 @@ public class CatalogItem   {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public void decreaseQuantity(int count) {
-        if (count > quantity) {
-            throw new IllegalArgumentException("Not enough products in stock.");
-        }
-        quantity -= count;
     }
 
     @Override

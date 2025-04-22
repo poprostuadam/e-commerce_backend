@@ -31,5 +31,19 @@ public class Main {
         System.out.println("All products (sorted by price asc.):");
         printCatalog(catalog.getProductsByCategorySortedByPrice(Category.FRUITS, false, true));
 
+        System.out.println("--------------------------------------");
+        int[] idx = {1};
+        catalog.getAllEntries().forEach(item -> {
+            System.out.println(idx[0] + "." + item.getProduct().getName()
+                    + " - Quantity: " + item.getQuantity() + " pcs.");
+        });
+
+
+        System.out.println("--------------------------------------");
+        int [] idx1 = {1};
+        catalog.getAllEntries().forEach(item -> {
+            System.out.println(idx1[0] + "." + item.getProduct().getName()
+                    + " - Quantity: " + item.getQuantity() + " pcs.");
+        });
     }
 }

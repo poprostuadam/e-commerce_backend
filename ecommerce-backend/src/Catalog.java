@@ -22,8 +22,10 @@ public class Catalog {
         addProduct(new Product("Beer", 1.15, Category.ALCOHOL, false), 10);
     }
 
+
     public void addProduct(Product product, int quantity) {
         entries.add(new CatalogItem(product, quantity));
+
     }
 
     public List<CatalogItem> getAllEntries() {
