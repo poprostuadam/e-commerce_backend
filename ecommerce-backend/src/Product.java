@@ -91,8 +91,8 @@ public class Product {
     /**
      * Compares this product to another object for equality.
      *
-     * @param o The object to compare this product to.
-     * @return true if the products are equal (same name, price, category, and availability), false otherwise.
+     * @param o The object to compare this product to
+     * @return true if the products are equal (same name, price, category, and availability), false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -121,6 +121,8 @@ public class Product {
      */
     @Override
     public String toString() {
-        return name + " [" + category + "] " + price + " zl " + (isAvailable ? "[Available]" : "[Unavailable]");
+/*        return String.format("%-12s | %-10s | %6.2f $ | %12s",
+                name, category, price, isAvailable ? "Available" : "Unavailable");*/
+        return name + " [" + category + "] " + price + "$ " + (isAvailable ? "[Available]" : "[Unavailable]");
     }
 }

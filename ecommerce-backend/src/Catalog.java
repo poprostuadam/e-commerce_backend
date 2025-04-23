@@ -17,8 +17,8 @@ public class Catalog {
     /**
      * Adds a specific quantity of a product to the catalog.
      *
-     * @param product The product to be added.
-     * @param quantity The quantity of the product to be added.
+     * @param product The product to be added
+     * @param quantity The quantity of the product to be added
      */
     public void addProduct(Product product, int quantity) {
         if (catalog.containsKey(product)) {
@@ -29,26 +29,41 @@ public class Catalog {
     }
 
     public void removeProduct(Product product) {
-        catalog.remove(product);
+        if (catalog.containsKey(product)) {
+            catalog.remove(product);
+            System.out.println("Product " + product.getName() + " removed");
+        } else {
+            System.out.println("Product " + product.getName() + " not found");
+        }
     }
 
     /**
      * Decreases the quantity of a product in the catalog.
      *
-     * @param product The product whose quantity will be decreased.
+     * @param product The product whose quantity will be decreased
      */
     public void decreaseProductQuantity(Product product) {
         if (catalog.containsKey(product)) {
             int quantity = catalog.get(product);
-            if (quantity > 0) {
+            if (quantity > 1) {
                 catalog.put(product, quantity - 1);
                 System.out.println("Product " + product.getName() + " has been decreased from " + quantity + " to: " + (quantity - 1));
             } else {
-                System.out.println("Product quantity is already 0.");
+                System.out.println("Product " + product.getName() + " quantity is already 0.");
+                removeProduct(product);
             }
         } else {
             System.out.println("Product " + product.getName() + " does not exist in catalog.");
         }
+    }
+
+    /**
+     * Set quantity of a product in the catalog.
+     * @param product The product whose quantity will be set
+     * @param quantity The quantity of the product to be set
+     */
+    public void setProductQuantity(Product product, int quantity) {
+            catalog.put(product, quantity);
     }
 
     /**
@@ -97,5 +112,34 @@ public class Catalog {
                 })
                 .map(Map.Entry::getKey)  // Return only the products (keys)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a string representation of the catalog, listing all products along with their details and quantities.
+     * If the catalog is empty, a message indicating this will be returned instead.
+     *
+     * @return a string representation of the catalog's contents
+     */
+    @Override
+    public String toString() {
+        StringBuilder sbuilder = new StringBuilder("Catalog:\n");
+        for (Map.Entry<Product, Integer> entry : catalog.entrySet()) {
+            sbuilder.append("- ")
+                    .append(entry.getKey().getName())
+                    .append("\t(Category: ")
+                    .append(entry.getKey().getCategory())
+                    .append(" | Price: ")
+                    .append(String.format("%.2f", entry.getKey().getPrice()) + "$")
+                    .append(" | Available: ")
+                    .append(entry.getKey().isAvailable() ? "YES" : "NO")
+                    .append(") Quantity: ")
+                    .append(entry.getValue())
+                    .append("\n");
+        }
+
+        if (catalog.isEmpty()) {
+            sbuilder.append("Catalog is empty\n");
+        }
+        return sbuilder.toString();
     }
 }
