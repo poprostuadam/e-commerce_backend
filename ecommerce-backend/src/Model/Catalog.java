@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,7 +10,7 @@ public class Catalog {
     private final  Map<Product, Integer> catalog;
 
     /**
-     * Constructs a new Catalog.
+     * Constructs a new Model.Catalog.
      */
     public Catalog() {
         catalog = new HashMap<>();
@@ -28,12 +30,18 @@ public class Catalog {
         }
     }
 
+    /**
+     * Removes a product from the catalog.
+     *
+     * @param product The product to be removed from the catalog
+     * @throws NoSuchElementException if the product is not found in the catalog
+     */
     public void removeProduct(Product product) {
         if (catalog.containsKey(product)) {
             catalog.remove(product);
-            System.out.println("Product " + product.getName() + " removed");
+            System.out.println("Model.Product " + product.getName() + " removed");
         } else {
-            System.out.println("Product " + product.getName() + " not found");
+    throw new NoSuchElementException("Model.Product " + product.getName() + " not found in the catalog.");
         }
     }
 
@@ -41,24 +49,29 @@ public class Catalog {
      * Decreases the quantity of a product in the catalog.
      *
      * @param product The product whose quantity will be decreased
-     */
+     * @throws NoSuchElementException if the product is not found in the catalog
+     * */
     public void decreaseProductQuantity(Product product) {
-        if (catalog.containsKey(product)) {
-            int quantity = catalog.get(product);
-            if (quantity > 1) {
-                catalog.put(product, quantity - 1);
-                System.out.println("Product " + product.getName() + " has been decreased from " + quantity + " to: " + (quantity - 1));
-            } else {
-                System.out.println("Product " + product.getName() + " quantity is already 0.");
-                removeProduct(product);
-            }
+        if (!catalog.containsKey(product)) {
+            throw new NoSuchElementException("Model.Product " + product.getName() + " not found in the catalog.");
+        }
+
+        int quantity = catalog.get(product);
+        if (quantity > 1) {
+            catalog.put(product, quantity - 1);
+            System.out.println("Model.Product " + product.getName() + " quantity decreased to: " + (quantity - 1));
+        } else if (quantity == 1) {
+            catalog.put(product, 0);
+            product.setAvailable(false);
+            System.out.println("Model.Product " + product.getName() + " out of stock.");
         } else {
-            System.out.println("Product " + product.getName() + " does not exist in catalog.");
+            System.out.println("Model.Product " + product.getName() + " is out of stock.");
         }
     }
 
     /**
      * Set quantity of a product in the catalog.
+     *
      * @param product The product whose quantity will be set
      * @param quantity The quantity of the product to be set
      */
@@ -75,7 +88,7 @@ public class Catalog {
         if (catalog.containsKey(product)) {
             return catalog.get(product);
         } else {
-            System.out.println("Product " + product.getName() + " does not exist in catalog.");
+            System.out.println("Model.Product " + product.getName() + " not found in the catalog.");
             return 0;
         }
     }
@@ -115,6 +128,37 @@ public class Catalog {
     }
 
     /**
+     * Displays the catalog in a formatted table.
+     * <p>
+     * Shows product name, price, quantity, and availability.
+     * If the product list is empty, displays a message indicating the catalog is empty.
+     * </p>
+     *
+     * @param products The list of products to display.
+     */
+    public void displayCatalog(List <Product> products) {
+        StringBuilder sbuilder = new StringBuilder("Model.Catalog:\n");
+
+        if (products.isEmpty()) {
+            sbuilder.append("Model.Catalog is empty\n");
+        } else {
+            sbuilder.append(String.format("| %-20s | %-10s | %-10s | %-12s |\n", "Model.Product", "Price", "Quantity", "Availability"));
+            sbuilder.append("|----------------------|------------|------------|--------------|\n");
+
+            for (Product product : products) {
+                sbuilder.append(String.format(
+                        "| %-20s | %-10s | %-10s | %-12s |\n",
+                        product.getName(),
+                        String.format("%.2f", product.getPrice()),
+                        catalog.getOrDefault(product, 0),
+                        product.isAvailable() ? "Yes" : "No"
+                ));
+            }
+        }
+        System.out.println(sbuilder.toString());
+    }
+
+    /**
      * Returns a string representation of the catalog, listing all products along with their details and quantities.
      * If the catalog is empty, a message indicating this will be returned instead.
      *
@@ -122,23 +166,23 @@ public class Catalog {
      */
     @Override
     public String toString() {
-        StringBuilder sbuilder = new StringBuilder("Catalog:\n");
-        for (Map.Entry<Product, Integer> entry : catalog.entrySet()) {
-            sbuilder.append("- ")
-                    .append(entry.getKey().getName())
-                    .append("\t(Category: ")
-                    .append(entry.getKey().getCategory())
-                    .append(" | Price: ")
-                    .append(String.format("%.2f", entry.getKey().getPrice()) + "$")
-                    .append(" | Available: ")
-                    .append(entry.getKey().isAvailable() ? "YES" : "NO")
-                    .append(") Quantity: ")
-                    .append(entry.getValue())
-                    .append("\n");
-        }
-
+        StringBuilder sbuilder = new StringBuilder("Model.Catalog:\n");
         if (catalog.isEmpty()) {
-            sbuilder.append("Catalog is empty\n");
+            sbuilder.append("Model.Catalog is empty\n");
+        } else {
+            for (Map.Entry<Product, Integer> entry : catalog.entrySet()) {
+                sbuilder.append("- ")
+                        .append(entry.getKey().getName())
+                        .append("\t(Model.Category: ")
+                        .append(entry.getKey().getCategory())
+                        .append(" | Price: ")
+                        .append(String.format("%.2f", entry.getKey().getPrice()) + "$")
+                        .append(" | Available: ")
+                        .append(entry.getKey().isAvailable() ? "YES" : "NO")
+                        .append(") Quantity: ")
+                        .append(entry.getValue())
+                        .append("\n");
+            }
         }
         return sbuilder.toString();
     }

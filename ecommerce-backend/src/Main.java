@@ -1,3 +1,5 @@
+import Model.*;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -14,7 +16,7 @@ public class Main {
         Product meat = new Product("Meat", 3.35, Category.MEAT, true);
         Product tomato = new Product("Tomato", 0.75, Category.VEGETABLES, true);
         Product salt = new Product("Salt", 0.29, Category.SPICES, true);
-        Product pepper = new Product("Pepper", 0.29, Category.SPICES, false);
+        Product pepper = new Product("Pepper", 0.19, Category.SPICES, false);
 
         List<Product> products = List.of(
                 apple, beer, cheese, fanta, coke, water, meat, tomato, salt, pepper
@@ -29,20 +31,38 @@ public class Main {
         catalog.decreaseProductQuantity(beer);
         catalog.decreaseProductQuantity(cheese);
         catalog.decreaseProductQuantity(beer);
-        catalog.removeProduct(cheese);
 
         System.out.println(catalog);
 
-        System.out.println("\nCatalog sorted by name: ");
-        catalog.getProductsSortedByName()
-                .forEach(product -> {
-                    System.out.println(product + " | Quantity: " + catalog.getProductQuantity(product));
-                });
+        catalog.decreaseProductQuantity(beer);
+        catalog.removeProduct(cheese);
 
-        System.out.println("\nCatalog sorted by price: ");
-        catalog.getProductsByCategorySortedByPrice(Category.SPICES, true, true)
-                .forEach(product -> {
-                    System.out.println(product + " | Quantity: " + catalog.getProductQuantity(product));
-                });
+        System.out.println("\n" + catalog);
+
+        System.out.println("\nModel.Catalog sorted by name: ");
+        catalog.displayCatalog(catalog.getProductsSortedByName());
+
+        System.out.println("\nModel.Catalog sorted by price: ");
+        catalog.displayCatalog(catalog.getProductsByCategorySortedByPrice(Category.SPICES, true, true));
+
+
+        Cart cart = new Cart(catalog);
+        cart.displayCart();
+        cart.addProduct(apple);
+        System.out.println(catalog.getProductQuantity(apple));
+        cart.addProduct(apple);
+        System.out.println(catalog.getProductQuantity(apple));
+        cart.removeProduct(apple);
+        System.out.println(catalog.getProductQuantity(apple));
+        cart.addProduct(fanta);
+        cart.addProduct(fanta);
+        cart.addProduct(fanta);
+
+        cart.displayCart();
+        cart.displayTotalPrice();
+        cart.finalizePurchase();
+        cart.finalizePurchase();
+        cart.displayCart();
+
     }
 }

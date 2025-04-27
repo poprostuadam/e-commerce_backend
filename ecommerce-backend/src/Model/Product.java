@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.*;
 
 /**
@@ -41,7 +43,7 @@ public class Product {
     }
 
     /**
-     * Get the category of the product
+     * Get the category of the product.
      */
     public Category getCategory() {
         return category;
@@ -58,6 +60,7 @@ public class Product {
 
     /**
      * Set the name of the product.
+     *
      * @param name the name to set for the product
      */
     public void setName(String name) {
@@ -66,6 +69,7 @@ public class Product {
 
     /**
      * Set the price of the product.
+     *
      * @param price the price to set for the product
      */
     public void setPrice(double price) {
@@ -73,7 +77,8 @@ public class Product {
     }
 
     /**
-     * Set the category of the product
+     * Set the category of the product.
+     *
      * @param category the category to set for product
      */
     public void setCategory(Category category) {
@@ -82,6 +87,7 @@ public class Product {
 
     /***
      * Set the availability status of the product.
+     *
      * @param isAvailable true if the product should be available, false if product should be unavailable
      */
     public void setAvailable(boolean isAvailable) {
@@ -98,25 +104,24 @@ public class Product {
     public boolean equals(Object o) {
         if (this == o) return true; // Check if the objects are the same
         if (o == null || getClass() != o.getClass()) return false; //Check if the object is of the same class
-        Product product = (Product) o; // Cast the object to Product
-        return Double.compare(product.price, price) == 0 &&
-                isAvailable == product.isAvailable() &&
-                Objects.equals(name, product.name) &&
+        Product product = (Product) o; // Cast the object to Model.Product
+        return Objects.equals(name, product.name) &&
                 category == product.category;
     }
 
     /**
      * Generates a hash code for this product.
      *
-     * @return A hash code value for the product based on its name, price, category, and availability.
+     * @return A hash code value for the product based on its name, price, category, and availability
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, category, isAvailable);
+        return Objects.hash(name, category);
     }
 
     /***
-     * Returns a string representation of the product
+     * Returns a string representation of the product.
+     *
      * @return a string that includes the product's name, category, price and availability
      */
     @Override
