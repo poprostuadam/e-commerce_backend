@@ -94,7 +94,7 @@ public class Cart {
      */
     public void displayTotalPrice() {
         double totalPrice = calculateTotalPrice();
-        System.out.printf("Total price: %.2f$\n", totalPrice);
+        System.out.printf("Total price: %.2fzl\n", totalPrice);
     }
 
     /**
@@ -111,9 +111,9 @@ public class Cart {
                 sbuilder.append(String.format(
                         "| %-20s | %-10s | %-10s | %-8s |\n",
                         entry.getKey().getName(),
-                        String.format("%.2f$", entry.getKey().getPrice()),
+                        String.format("%.2fzl", entry.getKey().getPrice()),
                         entry.getValue(),
-                        String.format("%.2f$", entry.getKey().getPrice() * entry.getValue())
+                        String.format("%.2fzl", entry.getKey().getPrice() * entry.getValue())
                 ));
             }
         }
@@ -122,7 +122,7 @@ public class Cart {
 
     /**
      * Applies a promotion code to the cart.
-     * The available promotions are hardcoded for now (e.g., 10% off).
+     * The available promotions are hardcoded (e.g., 10% off).
      *
      * @param code the promotion code to apply
      */
@@ -132,14 +132,14 @@ public class Cart {
                 activePromotion = new TenPercentOffPromotion();
                 System.out.println("Activated 10% off promotion.");
                 break;
-//            case "CHEAPEST1PLN":
-//                activePromotion = new CheapestForOneZlotyPromotion();
-//                System.out.println("Activated cheapest product for 1 PLN promotion.");
-//                break;
-//            case "BUY2HALF":
-//                activePromotion = new BuyOneGetSecondHalfPricePromotion();
-//                System.out.println("Activated buy 1 get second half price promotion.");
-//                break;
+            case "CHEAPEST1PLN":
+                activePromotion = new CheapestForOnePromotion();
+                System.out.println("Activated cheapest product for 1 zl promotion.");
+                break;
+            case "BUY2HALF":
+                activePromotion = new BuyOneGetSecondHalfPricePromotion();
+                System.out.println("Activated buy 1 get second half price promotion.");
+                break;
             default:
                 System.out.println("Invalid promotion code.");
                 break;

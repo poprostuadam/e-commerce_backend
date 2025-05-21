@@ -176,7 +176,7 @@ public class Catalog {
                         .append("\t(Model.Category: ")
                         .append(entry.getKey().getCategory())
                         .append(" | Price: ")
-                        .append(String.format("%.2f", entry.getKey().getPrice()) + "$")
+                        .append(String.format("%.2f", entry.getKey().getPrice()) + "zl")
                         .append(" | Available: ")
                         .append(entry.getKey().isAvailable() ? "YES" : "NO")
                         .append(") Quantity: ")
