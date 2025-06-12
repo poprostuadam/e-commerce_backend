@@ -74,7 +74,7 @@ public class CatalogTest {
         catalog.setProductQuantity(apple, 0);
         catalog.decreaseProductQuantity(apple);  // should warn but not throw
         assertEquals(0, catalog.getProductQuantity(apple));
-        assertTrue(apple.isAvailable()); // availability does not change here
+        assertFalse(apple.isAvailable()); // availability does not change here
     }
 
     /**
@@ -159,16 +159,28 @@ public class CatalogTest {
     }
 
 
-    /**
-     * Setting product quantity to 0 should retain its availability
-     * (may vary depending on implementation).
-     */
     @Test
-    void setProductQuantityToZero_shouldRetainAvailability() {
-        catalog.setProductQuantity(cheese, 0);
-        assertEquals(0, catalog.getProductQuantity(cheese));
-        assertTrue(cheese.isAvailable()); // or false, depending on business rules
+    void setProductQuantity_shouldSetPositiveQuantityAndMarkAvailable() {
+        // Verifies that setting a positive quantity updates the catalog and sets product as available
+        catalog.setProductQuantity(apple, 7);
+        assertEquals(7, catalog.getProductQuantity(apple));
+        assertTrue(apple.isAvailable());
     }
+
+    @Test
+    void setProductQuantity_shouldSetZeroAndMarkUnavailable() {
+        // Verifies that setting quantity to 0 disables product availability
+        catalog.setProductQuantity(apple, 0);
+        assertEquals(0, catalog.getProductQuantity(apple));
+        assertFalse(apple.isAvailable());
+    }
+
+    @Test
+    void setProductQuantity_shouldThrowForNegativeQuantity() {
+        // Verifies that setting a negative quantity throws an exception
+        assertThrows(IllegalArgumentException.class, () -> catalog.setProductQuantity(apple, -5));
+    }
+
 
     /**
      * Products with the same price should still be sorted properly by price.
