@@ -3,11 +3,17 @@ package Model;
 import Promotion.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test suite for the Cart class.
+ * Tests adding and removing products, calculating prices, and handling promotions.
+ */
 public class CartTest {
 
     private Catalog catalog;
@@ -15,6 +21,9 @@ public class CartTest {
     private Product apple;
     private Product cheese;
 
+    /**
+     * Sets up the catalog and cart before each test.
+     */
     @BeforeEach
     void setUp() {
         catalog = new Catalog();
@@ -25,19 +34,38 @@ public class CartTest {
         cart = new Cart(catalog);
     }
 
+    private void addProductMultipleTimes(Product product, int times) {
+        for (int i = 0; i < times; i++) {
+            cart.addProduct(product);
+        }
+    }
+
+    private void assertTotalPrice(double expectedPrice) {
+        assertEquals(expectedPrice, cart.calculateTotalPrice(), 0.01);
+    }
+
+    /**
+     * Adding a product should decrease its quantity in the catalog by 1.
+     */
     @Test
     void addProduct_shouldDecreaseCatalogQuantity() {
         cart.addProduct(apple);
         assertEquals(9, catalog.getProductQuantity(apple));
     }
 
+    /**
+     * An unavailable product (available = false) should not be added to the cart.
+     */
     @Test
     void addProduct_unavailableProduct_shouldNotAdd() {
         apple.setAvailable(false);
         cart.addProduct(apple);
-        assertEquals(10, catalog.getProductQuantity(apple));
+        assertEquals(10, catalog.getProductQuantity(apple)); // no change
     }
 
+    /**
+     * Removing a product from the cart should restore its quantity in the catalog.
+     */
     @Test
     void removeProduct_shouldIncreaseCatalogQuantity() {
         cart.addProduct(apple);
@@ -45,52 +73,82 @@ public class CartTest {
         assertEquals(10, catalog.getProductQuantity(apple));
     }
 
+    /**
+     * Trying to remove a product not in the cart should throw an exception.
+     */
     @Test
     void removeProduct_notInCart_shouldThrow() {
         assertThrows(NoSuchElementException.class, () -> cart.removeProduct(cheese));
     }
 
+    /**
+     * Final price without promotions should be the sum of product prices.
+     */
     @Test
     void calculateTotalPrice_noPromotion() {
         cart.addProduct(apple);
         cart.addProduct(cheese);
-        assertEquals(4.00, cart.calculateTotalPrice(), 0.01);
+        assertTotalPrice(4.00);
     }
 
+    /**
+     * A 10% discount promotion should lower the total price.
+     */
     @Test
     void calculateTotalPrice_withTenPercentOff() {
         cart.addProduct(apple);
         cart.addProduct(cheese);
         cart.applyPromotionCode("PROMO10");
-        assertEquals(3.60, cart.calculateTotalPrice(), 0.01);
+        assertTotalPrice(3.60);
     }
 
+    /**
+     * "Buy one, get the second at half price" promotion – for identical products.
+     */
     @Test
     void calculateTotalPrice_withBuyOneGetSecondHalfPrice() {
-        cart.addProduct(cheese);
-        cart.addProduct(cheese);
+        addProductMultipleTimes(cheese, 2);
         cart.applyPromotionCode("BUY2HALF");
-        assertEquals(4.50, cart.calculateTotalPrice(), 0.01); // 3.00 + 1.50
+        assertTotalPrice(4.50); // 3.00 + 1.50
     }
 
+    /**
+     * Cheapest product for 1 PLN.
+     */
     @Test
     void calculateTotalPrice_withCheapestForOne() {
         cart.addProduct(apple);
-        cart.addProduct(cheese);
-        cart.addProduct(cheese);
+        addProductMultipleTimes(cheese, 2);
         cart.applyPromotionCode("CHEAPEST1PLN");
-        assertEquals(7.00, cart.calculateTotalPrice(), 0.01); // Apple za 1 zł
+        assertTotalPrice(7.00); // Apple for 1.00 + 3.00 * 2
     }
 
+    /**
+     * Finalizing the purchase should clear the cart.
+     */
     @Test
     void finalizePurchase_shouldClearCart() {
         cart.addProduct(apple);
         cart.finalizePurchase();
-        assertEquals(0.0, cart.calculateTotalPrice(), 0.01);
+        assertTotalPrice(0.0);
     }
 
+    /**
+     * Finalizing an empty cart – should not throw an exception.
+     */
     @Test
     void finalizePurchase_onEmptyCart_shouldNotCrash() {
-        cart.finalizePurchase(); // just verify no exception
+        cart.finalizePurchase(); // should not crash
     }
-}
+
+    /**
+     * Finalizing a purchase with promotion should apply it before clearing the cart.
+     */
+    @Test
+    void finalizePurchase_withPromotion_shouldApplyCorrectly() {
+        cart.addProduct(apple);
+        cart.addProduct(cheese);
+        cart.applyPromotionCode("PROMO10");
+        cart.finalizePurchase(); // apply discount and clear
+        assertTotalPrice(0.0); // cart is empty after purchase
+    }}
