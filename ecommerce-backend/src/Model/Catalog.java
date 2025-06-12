@@ -76,8 +76,19 @@ public class Catalog {
      * @param quantity The quantity of the product to be set
      */
     public void setProductQuantity(Product product, int quantity) {
-            catalog.put(product, quantity);
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative.");
+        }
+
+        catalog.put(product, quantity);
+
+        if (quantity == 0) {
+            product.setAvailable(false);
+        } else {
+            product.setAvailable(true);
+        }
     }
+
 
     /**
      * Get the product quantity.
