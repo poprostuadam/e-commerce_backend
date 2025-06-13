@@ -104,6 +104,10 @@ public class Main {
         cart.addProduct(cheese);
         cart.addProduct(cheese);
         cart.addProduct(cheese);
+        cart.addProduct(meat);
+        cart.addProduct(meat);
+        cart.addProduct(meat);
+        cart.addProduct(beer);
 
         cart.displayCart();
         cart.displayTotalPrice();
