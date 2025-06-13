@@ -31,15 +31,15 @@ public class Main {
         System.out.println(catalog);
 
         // Update product quantities in catalog
-        catalog.addProduct(apple, 10);              // add more apples
+        catalog.addProduct(apple, 10);       // add more apples
         catalog.decreaseProductQuantity(coke);      // simulate purchase
         catalog.decreaseProductQuantity(cheese);
         catalog.decreaseProductQuantity(coke);
 
         System.out.println(catalog);
 
-        catalog.decreaseProductQuantity(coke);      // beer stock should be lower
-        catalog.removeProduct(tomato);              // remove cheese entirely
+        catalog.decreaseProductQuantity(coke);
+        catalog.removeProduct(tomato);
 
         catalog.addProduct(cheese, 8);
         catalog.addProduct(beer, 8);
