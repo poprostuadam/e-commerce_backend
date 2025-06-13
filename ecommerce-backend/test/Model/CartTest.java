@@ -151,4 +151,29 @@ public class CartTest {
         cart.applyPromotionCode("PROMO10");
         cart.finalizePurchase(); // apply discount and clear
         assertTotalPrice(0.0); // cart is empty after purchase
-    }}
+    }
+
+    @Test
+    void applyPromotionCode_withEmptyString_shouldNotApplyPromotion() {
+        // Verifies that an empty promotion code results in no active promotion
+        cart.addProduct(apple); // 1.00
+        cart.addProduct(apple); // 2.00 total
+
+        cart.applyPromotionCode(""); // No promotion should be applied
+
+        double price = cart.calculateTotalPrice();
+        assertEquals(2.00, price, 0.01); // Should be full price
+    }
+
+    @Test
+    void wrongPromotionCode_shouldNotApplyPromotion() {
+        // Verifies that a wrong promotion code results in no active promotion
+        cart.addProduct(apple); // 1.00
+        cart.addProduct(apple); // 2.00 total
+
+        cart.applyPromotionCode("wrong_code"); // No promotion should be applied
+
+        double price = cart.calculateTotalPrice();
+        assertEquals(2.00, price, 0.01); // Should be full price
+    }
+}

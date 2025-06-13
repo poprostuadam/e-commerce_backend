@@ -127,6 +127,13 @@ public class Cart {
      * @param code the promotion code to apply
      */
     public void applyPromotionCode(String code) {
+
+        if (code == null || code.isBlank()) {
+            activePromotion = null;
+            System.out.println("No promotion applied.");
+            return;
+        }
+
         switch (code) {
             case "PROMO10":
                 activePromotion = new TenPercentOffPromotion();
