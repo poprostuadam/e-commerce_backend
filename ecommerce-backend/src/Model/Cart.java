@@ -171,6 +171,7 @@ public class Cart {
         displayCart();
         displayTotalPrice();
         cart.clear();
+        activePromotion = null;
         System.out.println("Purchase completed.\nModel.Cart has been emptied");
     }
 
