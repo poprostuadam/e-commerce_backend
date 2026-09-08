@@ -1,6 +1,7 @@
 # E-commerce Domain Demo
 
 [![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Java CI](https://github.com/poprostuadam/e-commerce_backend/actions/workflows/java-ci.yml/badge.svg)](https://github.com/poprostuadam/e-commerce_backend/actions/workflows/java-ci.yml)
 [![JUnit 5](https://img.shields.io/badge/JUnit-5-25A162?logo=junit5&logoColor=white)](https://junit.org/junit5/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -67,22 +68,19 @@ A detailed class diagram is also included in the repository:
 
 ```text
 .
+├── .github/workflows/java-ci.yml
 ├── Diagram.png
 ├── LICENSE
 ├── README.md
 └── ecommerce-backend/
+    ├── .mvn/wrapper/maven-wrapper.properties
+    ├── pom.xml
+    ├── mvnw
+    ├── mvnw.cmd
     ├── src/
     │   ├── Main.java
     │   ├── Model/
-    │   │   ├── Cart.java
-    │   │   ├── Catalog.java
-    │   │   ├── Category.java
-    │   │   └── Product.java
     │   └── Promotion/
-    │       ├── Promotion.java
-    │       ├── TenPercentOffPromotion.java
-    │       ├── CheapestForOnePromotion.java
-    │       └── BuyOneGetSecondHalfPricePromotion.java
     └── test/
         ├── Model/
         └── Promotion/
@@ -91,11 +89,11 @@ A detailed class diagram is also included in the repository:
 ## Requirements
 
 - JDK 17 or newer,
-- a POSIX-compatible shell for the command below.
+- an internet connection on the first build so Maven Wrapper can download Maven and dependencies.
 
-The application itself uses only the Java standard library.
+A separate Maven installation is not required.
 
-## Compile and run
+## Build and run
 
 Clone the repository and enter the Java project directory:
 
@@ -104,31 +102,19 @@ git clone https://github.com/poprostuadam/e-commerce_backend.git
 cd e-commerce_backend/ecommerce-backend
 ```
 
-Compile all production sources:
+Build the project and run all tests:
 
 ```bash
-mkdir -p out
-find src -name "*.java" -print0 | xargs -0 javac -d out
+sh ./mvnw clean verify
 ```
 
-Run the demonstration:
+Run the console demonstration:
 
 ```bash
-java -cp out Main
+java -cp target/classes Main
 ```
 
-The program creates a sample catalog, performs stock operations, adds and removes cart items, and demonstrates all three promotion strategies.
-
-### Windows PowerShell
-
-```powershell
-New-Item -ItemType Directory -Force out
-Get-ChildItem -Recurse src -Filter *.java |
-    Select-Object -ExpandProperty FullName |
-    Set-Content sources.txt
-javac -d out '@sources.txt'
-java -cp out Main
-```
+On Windows, use `mvnw.cmd clean verify` instead of the shell command.
 
 ## Tests
 
@@ -139,12 +125,13 @@ Tests are located in `ecommerce-backend/test/` and use JUnit 5:
 - `CartTest` — cart operations and totals,
 - `PromotionTest` — discount calculations.
 
-No Maven or Gradle build definition is currently committed. To run the tests, import `ecommerce-backend/` into an IDE, configure JUnit 5, and mark:
+Run only the test suite with:
 
-- `src/` as the source root,
-- `test/` as the test source root.
+```bash
+sh ./mvnw test
+```
 
-Adding a reproducible Maven or Gradle build is the highest-priority project improvement.
+GitHub Actions automatically runs `verify` for every pull request and every push to `main`.
 
 ## Current scope and limitations
 
@@ -153,19 +140,15 @@ Adding a reproducible Maven or Gradle build is the highest-priority project impr
 - Products are compared by name and category.
 - Promotion codes are hardcoded in `Cart`.
 - The project has no API, persistence, validation layer, or concurrent stock handling.
-- IDE project files are currently committed.
-- The nested, non-standard source layout requires manual compilation configuration.
+- Maven is configured for the existing non-standard `src/` and `test/` layout.
 
 ## Roadmap
 
-- add a Gradle or Maven build with a wrapper,
 - reorganize sources into the conventional `src/main/java` and `src/test/java` layout,
-- add continuous integration,
 - use `BigDecimal` and an explicit currency type,
 - separate console output from domain logic,
 - expose the domain through a REST API,
-- add persistence and transactional inventory updates,
-- remove IDE-specific files from version control.
+- add persistence and transactional inventory updates.
 
 ## License
 
